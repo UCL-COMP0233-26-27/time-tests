@@ -17,9 +17,13 @@ def compute_overlap_time(range1, range2):
         for start2, end2 in range2:
             low = max(start1, start2)
             high = min(end1, end2)
-            overlap_time.append((low, high))
+            # print ("low is", low)
+            # print ("high is", high)
+            if low > high:
+                return "No overlap"
+            else:
+                overlap_time.append((low, high))
     return overlap_time
-
 
 """
 # exploration
@@ -28,12 +32,24 @@ large = time_range("2010-01-12 10:00:00", "2010-01-12 12:00:00")
 short = time_range("2010-01-12 10:30:00", "2010-01-12 10:45:00", 2, 60)
 early = time_range("2000-01-12 10:00:00", "2000-01-12 12:00:00")
 late = time_range("2020-01-12 10:00:00", "2020-01-12 12:00:00")
-time_range("2010-01-12 10:00:00", "2010-01-12 12:00:00")
-time_range("2010-01-12 10:30:00", "2010-01-12 10:45:00", 2, 60)
+
+print (early)
+print (short)
+
+time1 = "2010-01-12 10:00:00"
+time2 = "2000-01-12 10:00:00"
+time1 > time2
+time1 < time2
+
+type(time1)
 
 compute_overlap_time(large, short)
 compute_overlap_time(early, short)
+compute_overlap_time(early, late)
+compute_overlap_time(short, late)
+
 print(compute_overlap_time(large, short))
+print(compute_overlap_time(early, late))
 
 expected = [('2010-01-12 10:30:00', '2010-01-12 10:37:00'), ('2010-01-12 10:38:00', '2010-01-12 10:45:00')]
 expected = "dummy info"
@@ -48,4 +64,6 @@ def test_given_input():
     # expected = "dummy info"
     assert result == expected
 
-print(test_given_input())"""
+print(test_given_input())
+
+"""
