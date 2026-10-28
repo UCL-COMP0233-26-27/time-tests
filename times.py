@@ -20,6 +20,8 @@ def compute_overlap_time(range1, range2):
             overlap_time.append((low, high))
     return overlap_time
 
+
+"""
 # exploration
 # running the functions
 large = time_range("2010-01-12 10:00:00", "2010-01-12 12:00:00")
@@ -46,4 +48,4 @@ def test_given_input():
     # expected = "dummy info"
     assert result == expected
 
-print(test_given_input())
+print(test_given_input())"""
