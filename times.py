@@ -78,5 +78,8 @@ def compute_overlap_time(range1: TimeIntervals, range2: TimeIntervals) -> TimeIn
         for start2, end2 in range2:
             low = max(start1, start2)
             high = min(end1, end2)
-            overlap_time.append((low, high))
+            # Only append overlap when the start time of the overlap is
+            # before the end time of the overlap!
+            if low <= high:
+                overlap_time.append((low, high))
     return overlap_time

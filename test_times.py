@@ -17,3 +17,40 @@ def test_given_input() -> None:
     ]
 
     assert result == expected
+
+
+def test_non_overlapping_ranges() -> None:
+    first_range = time_range("2010-01-12 10:00:00", "2010-01-12 11:00:00")
+    second_range = time_range("2010-01-12 12:00:00", "2010-01-12 12:00:00")
+
+    result = compute_overlap_time(first_range, second_range)
+    expected = []
+
+    assert result == expected
+
+
+def test_several_intervals() -> None:
+    first_range = time_range("2010-01-12 10:00:00", "2010-01-12 11:00:00", 4)
+    second_range = time_range("2010-01-12 10:20:00", "2010-01-12 12:00:00", 3, 300)
+
+    result = compute_overlap_time(first_range, second_range)
+    expected = [
+        ("2010-01-12 10:20:00", "2010-01-12 10:30:00"),
+        ("2010-01-12 10:30:00", "2010-01-12 10:45:00"),
+        ("2010-01-12 10:45:00", "2010-01-12 10:50:00"),
+        ("2010-01-12 10:55:00", "2010-01-12 11:00:00"),
+    ]
+
+    assert result == expected
+
+
+def test_touching_intervals() -> None:
+    first_range = time_range("2010-01-12 10:00:00", "2010-01-12 11:00:00", 1)
+    second_range = time_range("2010-01-12 11:00:00", "2010-01-12 12:00:00", 1)
+
+    result = compute_overlap_time(first_range, second_range)
+    expected = [
+        ("2010-01-12 11:00:00", "2010-01-12 11:00:00"),
+    ]
+
+    assert result == expected
