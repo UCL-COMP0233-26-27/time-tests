@@ -1,3 +1,5 @@
+import pytest
+
 from times import compute_overlap_time, time_range
 
 
@@ -54,3 +56,10 @@ def test_touching_intervals() -> None:
     ]
 
     assert result == expected
+
+
+def test_no_backwards_time_ranges() -> None:
+    with pytest.raises(
+        ValueError, match="Backwards interval: start time is after end time"
+    ):
+        time_range("2010-01-12 10:00:00", "2010-01-12 09:00:00")
