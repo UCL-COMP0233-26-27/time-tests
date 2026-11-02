@@ -38,7 +38,12 @@ def test_several_intervals():
 
 
 ##  two time ranges that end exactly at the same time when the other starts
-
+def test_same_start_endtime(): 
+    large = time_range("2010-01-12 10:00:00", "2010-01-12 12:00:00")
+    next = time_range("2010-01-12 12:00:00", "2010-01-12 12:30:00")
+    expected = []
+    actual = compute_overlap_time(large, next)
+    assert actual == expected 
 
 
 """
