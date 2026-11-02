@@ -55,6 +55,6 @@ def test_multiple_intervals():
     assert result == expected
 
 def test_backwards_time_range():
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="End time cannot be before start time"):
         time_range("2010-01-12 12:00:00", "2010-01-12 10:00:00")
 
