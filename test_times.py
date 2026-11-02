@@ -10,4 +10,8 @@ def test_ranges_touching_at_one_endpoint():
     first = time_range("2010-01-12 10:00:00", "2010-01-12 11:00:00")
     second = time_range("2010-01-12 11:00:00", "2010-01-12 12:00:00")
 
-    assert compute_overlap_time(first, second) == []
+    expected = [
+        ("2010-01-12 11:00:00", "2010-01-12 11:00:00")
+    ]
+
+    assert compute_overlap_time(first, second) == expected
