@@ -1,3 +1,4 @@
+import pytest
 from times import time_range, compute_overlap_time
 
 def test_given_input():
@@ -15,6 +16,13 @@ def test_given_input():
 
     # check whether the actual result matches the expected result
     assert result == expected
+
+def test_empty_input():
+    range1 = []
+    range2 = [("10:00", "11:00")]
+
+    result = compute_overlap_time(range1, range2)
+    assert result == []
 
 def test_partial_overlap():
     range1 = [("10:00", "12:00")]
@@ -48,13 +56,8 @@ def test_adjacent_intervals():
     range2 = [("11:00", "12:00")]
 
     result = compute_overlap_time(range1, range2)
-
     assert result == []
 
-def test_empty_input():
-    range1 = []
-    range2 = [("10:00", "11:00")]
-
-    result = compute_overlap_time(range1, range2)
-
-    assert result == []
+def test_time_range_backwords():
+    with pytest.raises(ValueError, match="end_time must be after start_time"):
+        time_range("2010-01-12 12:00:00", "2010-01-12 10:00:00")
