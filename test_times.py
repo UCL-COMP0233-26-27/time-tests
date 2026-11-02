@@ -6,3 +6,8 @@ def test_given_input():
     result = compute_overlap_time(large, short)
     expected = [('2010-01-12 10:30:00', '2010-01-12 10:37:00'), ('2010-01-12 10:38:00', '2010-01-12 10:45:00')]
     assert result == expected
+
+# create a test each in test_times.py for:
+    # two time ranges that do not overlap
+    # two time ranges that both contain several intervals each
+    # two time ranges that end exactly at the same time when the other starts
