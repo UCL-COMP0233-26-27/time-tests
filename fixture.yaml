@@ -1,0 +1,33 @@
+
+- partial_overlap:
+    time_range_1:
+      - ["10:00", "12:00"]
+    time_range_2:
+      - ["11:00", "13:00"]
+    expected:
+      - ["11:00", "12:00"]
+
+- no_overlap:
+    time_range_1:
+      - ["10:00", "10:30"]
+    time_range_2:
+      - ["11:00", "11:30"]
+    expected: []
+
+- multiple_overlaps:
+    time_range_1:
+      - ["10:00", "11:00"]
+      - ["12:00", "13:00"]
+    time_range_2:
+      - ["10:30", "11:30"]
+      - ["12:30", "13:30"]
+    expected:
+      - ["10:30", "11:00"]
+      - ["12:30", "13:00"]
+
+- adjacent_intervals:
+    time_range_1:
+      - ["10:00", "11:00"]
+    time_range_2:
+      - ["11:00", "12:00"]
+    expected: []
