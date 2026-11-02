@@ -21,20 +21,35 @@ def test_partial_overlap():
     range2 = [("11:00", "13:00")]
 
     result = compute_overlap_time(range1, range2)
-
     expected = [("11:00", "12:00")]
 
     assert result == expected
 
+# test case for no overlap
 def test_no_overlap():
     range1 = [("10:00", "10:30")]
     range2 = [("11:00", "11:30")]
 
-    result = compute_overlap_time(range1, range2)
+    assert compute_overlap_time(range1, range2) == []
 
-    expected = []
+# test case for both several overlapping intervals
+def test_multiple_overlaps():
+    range1 = [("10:00", "11:00"), ("12:00", "13:00")]
+    range2 = [("10:30", "11:30"), ("12:30", "13:30")]
+
+    result = compute_overlap_time(range1, range2)
+    expected = [("10:30", "11:00"), ("12:30", "13:00")]
 
     assert result == expected
+
+# test case for adjacent intervals
+def test_adjacent_intervals():
+    range1 = [("10:00", "11:00")]
+    range2 = [("11:00", "12:00")]
+
+    result = compute_overlap_time(range1, range2)
+
+    assert result == []
 
 def test_empty_input():
     range1 = []
