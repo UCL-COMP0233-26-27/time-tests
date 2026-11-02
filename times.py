@@ -27,13 +27,26 @@ def compute_overlap_time(range1, range2):
     return overlap_time
 
 
+if __name__ == "__main__":
+    invalid_time_range = time_range("2010-01-12 11:00:00", "2010-01-12 10:00:00")
+    large = time_range("2010-01-12 10:00:00", "2010-01-12 12:00:00")
+    
+# exploration
+# running the functions
+large = time_range("2010-01-12 10:00:00", "2010-01-12 12:00:00")
+short = time_range("2010-01-12 10:30:00", "2010-01-12 10:45:00", 2, 60)
+early = time_range("2000-01-12 10:00:00", "2000-01-12 12:00:00")
+late = time_range("2020-01-12 10:00:00", "2020-01-12 12:00:00")
+
+four_times = time_range("2010-01-12 10:00:00", "2010-01-12 11:00:00", 4, 30)
+print(four_times)
+three_times = time_range("2010-01-12 10:30:00", "2010-01-12 10:45:00", 3, 60)
 """
 invalid_time_range = time_range("2010-01-12 11:00:00", "2010-01-12 10:00:00")
 large = time_range("2010-01-12 10:00:00", "2010-01-12 12:00:00")
 compute_overlap_time(large, invalid_time_range)
+compute_overlap_time(large, invalid_time_range)
 
-"""
-"""
 # exploration
 # running the functions
 large = time_range("2010-01-12 10:00:00", "2010-01-12 12:00:00")
