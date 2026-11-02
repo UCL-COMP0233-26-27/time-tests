@@ -72,7 +72,14 @@ def test_given_input():
     # expected = "dummy info"
     assert result == expected
 
+large = time_range("2010-01-12 10:00:00", "2010-01-12 12:00:00")
+next = time_range("2010-01-12 12:00:00", "2010-01-12 12:30:00")
+
+compute_overlap_time(large, next)
+
 print(test_given_input())
 
 """
+
+
 
