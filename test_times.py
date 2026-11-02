@@ -50,12 +50,12 @@ def test_same_start_endtime():
 
 ##  invalid date range test
 def test_time_range(): 
-    with raises(ValueError), match = "Start time should be before end time, please try again.":
+    with raises(ValueError, match = "Start time should be before end time, please try again."):
         time_range("2010-01-12 11:00:00", "2010-01-12 10:00:00")
     
 
 """
-create a test each in test_times.py for:
+create a test each in test_ti,mes.py for:
 
     two time ranges that do not overlap
 
