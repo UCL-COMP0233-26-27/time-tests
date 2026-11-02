@@ -22,14 +22,12 @@ def test_no_overlap():
     # short = time_range("2010-01-12 10:30:00", "2010-01-12 10:45:00", 2, 60)
     result = compute_overlap_time(large, early) 
     # expected = [('2010-01-12 10:30:00', '2010-01-12 10:37:00'), ('2010-01-12 10:38:00', '2010-01-12 10:45:00')]
-    expected = 'No overlap'
+    expected = []
     # result = "dummy info"
     assert result == expected
 
 # test several intervals each
-def test_no_overlap():
-    # large = time_range("2010-01-12 10:00:00", "2010-01-12 12:00:00")
-    # early = time_range("2000-01-12 10:00:00", "2000-01-12 12:00:00")
+def test_several_intervals():
     four_times = time_range("2010-01-12 10:00:00", "2010-01-12 11:00:00", 4, 30)   
     three_times = time_range("2010-01-12 10:30:00", "2010-01-12 11:30:00", 3, 60)
     expected = [('2010-01-12 10:30:15', '2010-01-12 10:44:52'), ('2010-01-12 10:45:22', '2010-01-12 10:49:20'), ('2010-01-12 10:50:20', '2010-01-12 11:00:00')]
@@ -37,6 +35,11 @@ def test_no_overlap():
     result = compute_overlap_time(four_times, three_times) 
     # result = "dummy info"
     assert result == expected
+
+
+##  two time ranges that end exactly at the same time when the other starts
+
+
 
 """
 create a test each in test_times.py for:
