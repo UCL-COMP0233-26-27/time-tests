@@ -4,6 +4,7 @@
 # from .times.py import time_range
 from times import time_range
 from times import compute_overlap_time
+from pytest import raises
 
 # testing the info
 def test_given_input():
@@ -45,6 +46,14 @@ def test_same_start_endtime():
     actual = compute_overlap_time(large, next)
     assert actual == expected 
 
+##  invalid date range test
+def test_time_range(): 
+    # invalid_time_range = time_range("2010-01-12 11:00:00", "2010-01-12 10:00:00")
+    # expected = []
+    with raises(ValueError):
+        time_range("2010-01-12 11:00:00", "2010-01-12 10:00:00")
+    
+    # assert actual == expected 
 
 """
 create a test each in test_times.py for:
