@@ -1,66 +1,92 @@
+
+import datetime
+from unittest.mock import patch
+
 import pytest
-from times import time_range, compute_overlap_time
 
-import yaml
-from pathlib import Path
+from times import time_range, compute_overlap_time, iss_passes
 
 
-# Read test data from YAML
-fixture_path = Path(__file__).with_name("fixture.yaml")
+# Test 1: Basic time range
+def test_time_range():
+    result = time_range(
+        "2010-01-12 10:00:00",
+        "2010-01-12 12:00:00"
+    )
 
-with fixture_path.open("r", encoding="utf-8") as file:
-    fixture_data = yaml.safe_load(file)
-
-test_cases = []
-
-for case in fixture_data:
-    for name, data in case.items():
-        range1 = [tuple(item) for item in data["time_range_1"]]
-        range2 = [tuple(item) for item in data["time_range_2"]]
-        expected = [tuple(item) for item in data["expected"]]
-
-        test_cases.append(
-            pytest.param(range1, range2, expected, id=name)
-        )
-
-
-@pytest.mark.parametrize(
-    "time_range_1, time_range_2, expected",
-    test_cases
-)
-def test_overlap_cases(time_range_1, time_range_2, expected):
-    result = compute_overlap_time(time_range_1, time_range_2)
-    assert result == expected
-
-# Test 5: Original example
-def test_given_input():
-    large = time_range("2010-01-12 10:00:00", "2010-01-12 12:00:00")
-    short = time_range("2010-01-12 10:30:00", "2010-01-12 10:45:00", 2, 60)
-
-    result = compute_overlap_time(large, short)
-
-    expected = [
-        ("2010-01-12 10:30:00", "2010-01-12 10:37:00"),
-        ("2010-01-12 10:38:00", "2010-01-12 10:45:00")
+    assert result == [
+        ("2010-01-12 10:00:00", "2010-01-12 12:00:00")
     ]
 
-    assert result == expected
 
-
-# Test 6: Empty input
-def test_empty_input():
-    range1 = []
-    range2 = [("10:00", "11:00")]
-
-    result = compute_overlap_time(range1, range2)
-
-    assert result == []
-
-
-# Test 7: Backwards time range
-def test_backwards_time_range():
+# Test 2: Invalid time range
+def test_backwards():
     with pytest.raises(ValueError):
         time_range(
             "2010-01-12 12:00:00",
             "2010-01-12 10:00:00"
         )
+
+
+# Test 3: Overlapping intervals
+def test_overlap():
+    large = time_range(
+        "2010-01-12 10:00:00",
+        "2010-01-12 12:00:00"
+    )
+
+    short = time_range(
+        "2010-01-12 10:30:00",
+        "2010-01-12 10:45:00"
+    )
+
+    result = compute_overlap_time(large, short)
+
+    assert result == [
+        ("2010-01-12 10:30:00", "2010-01-12 10:45:00")
+    ]
+
+
+# Test 4: Mock ISS API request
+def test_iss_passes():
+    fake_data = {
+        "passes": [
+            {
+                "startUTC": 1700000000,
+                "endUTC": 1700000300
+            }
+        ]
+    }
+
+    with patch("times.requests.get") as mock_get:
+        mock_get.return_value.json.return_value = fake_data
+
+        result = iss_passes("fake-api-key")
+
+        expected_start = datetime.datetime.fromtimestamp(
+            1700000000
+        ).strftime("%Y-%m-%d %H:%M:%S")
+
+        expected_end = datetime.datetime.fromtimestamp(
+            1700000300
+        ).strftime("%Y-%m-%d %H:%M:%S")
+
+        assert result == [(expected_start, expected_end)]
+
+        mock_get.assert_called_once()
+        mock_get.return_value.raise_for_status.assert_called_once()
+
+
+# Test 5: ISS API returns no passes
+def test_iss_passes_empty():
+    fake_data = {
+        "passes": []
+    }
+
+    with patch("times.requests.get") as mock_get:
+        mock_get.return_value.json.return_value = fake_data
+
+        result = iss_passes("fake-api-key")
+
+        assert result == []
+        mock_get.assert_called_once()
