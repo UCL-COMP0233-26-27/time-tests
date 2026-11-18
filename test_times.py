@@ -85,7 +85,8 @@
 #     result = compute_overlap_time(time_range_1, time_range_2)
 #     assert result == expected
 
-
+from unittest.mock import patch
+import times
 
 from pathlib import Path
 
@@ -126,4 +127,25 @@ def test_no_backwards_time_ranges():
         time_range("2010-01-12 10:00:00", "2010-01-12 09:00:00")
 
 
+def test_iss_passes():
+    fake_response = {"passes": [
+            {"startUTC": 0,"endUTC": 60,},
+            {"startUTC": 120,"endUTC": 180,},] }
+
+    expected = [
+        ("1970-01-01 00:00:00", "1970-01-01 00:01:00"),
+        ("1970-01-01 00:02:00", "1970-01-01 00:03:00"),]
+
+    with patch.dict("os.environ",{"N2YO_API_KEY": "test-key"},):
+        with patch("times.requests.get") as mock_get:
+            mock_get.return_value.json.return_value = fake_response
+
+            result = times.iss_passes()
+
+            assert result == expected
+            mock_get.assert_called_once()
+
+            url = mock_get.call_args.args[0]
+            assert "visualpasses/25544/56/0/0/5/50" in url
+            assert "apiKey=test-key" in url
 
