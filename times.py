@@ -1,7 +1,7 @@
 import datetime
 import os
 import requests
-
+TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 def time_range(start_time, end_time, number_of_intervals=1, gap_between_intervals_s=0):
     start_time_s = datetime.datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S")
@@ -27,45 +27,34 @@ def compute_overlap_time(range1, range2):
 
 
 
-def iss_passes(
-    latitude=56,
-    longitude=0,
-    altitude=0,
-    days=5,
-    min_visibility=50,
-):
-    """Get visible ISS passes as pairs of UTC time strings."""
+def iss_passes(latitude=56,longitude=0,altitude=0,days=5,min_visibility=50,):
+    """Return visible ISS passes as pairs of UTC time strings."""
 
     api_key = os.environ["N2YO_API_KEY"]
 
-    base_url = "https://api.n2yo.com/rest/v1/satellite/visualpasses"
+    base_url = ("https://api.n2yo.com/rest/v1/satellite/visualpasses")
 
-    url = (
-        f"{base_url}/25544/{latitude}/{longitude}/"
-        f"{altitude}/{days}/{min_visibility}/&apiKey={api_key}"
-    )
+    url = (f"{base_url}/25544/" f"{latitude}/{longitude}/{altitude}/" f"{days}/{min_visibility}/&apiKey={api_key}")
 
     response = requests.get(url, timeout=10)
     response.raise_for_status()
 
-    pass_data = response.json()["passes"]
-
+    data = response.json()
     intervals = []
-    time_format = "%Y-%m-%d %H:%M:%S"
 
-    for passage in pass_data:
-        start_time = datetime.datetime.fromtimestamp(
+    for passage in data["passes"]:
+        start = datetime.datetime.fromtimestamp(
             passage["startUTC"],
             tz=datetime.timezone.utc,
         )
 
-        end_time = datetime.datetime.fromtimestamp(
+        end = datetime.datetime.fromtimestamp(
             passage["endUTC"],
             tz=datetime.timezone.utc,
         )
 
-        start_string = start_time.strftime(time_format)
-        end_string = end_time.strftime(time_format)
+        start_string = start.strftime(TIME_FORMAT)
+        end_string = end.strftime(TIME_FORMAT)
 
         intervals.append((start_string, end_string))
 
